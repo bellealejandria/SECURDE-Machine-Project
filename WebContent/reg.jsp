@@ -66,7 +66,7 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">ID Number</label>
-                                                            <input type="number" name="idnumber" class="form-control" >
+                                                            <input type="number" name="idnumber" maxlength="8" min="10000000" max="20179999"  class="form-control" >
 												        </div>
 	                                                   </div>
                                                     </div>
@@ -107,7 +107,7 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">E-mail</label>
-                                                            <input type="text" name="email" class="form-control" >
+                                                            <input type="email" name="email" class="form-control" >
 												        </div>
 	                                                   </div>
                                                     </div>
@@ -125,12 +125,12 @@
                                                             <label class="control-label">Secret Question</label>
 												            <div class="form-group label-floating">
                                                             
-                                                            <select type="text" name="secretQuestion" class="form-control" >
-                                                                <option value="Q1">What was your childhood nickname?</option>
-                                                                <option value="Q2">What is your favorite movie?</option>
-                                                                <option value="Q3">What is the name of your favorite pet?</option>
-                                                                <option value="Q4">What street did you grow up on?</option>
-                                                                <option value="Q5">What is your mother's maiden name?</option>
+                                                            <select name="secretQuestion" class="form-control" >
+                                                                <option>What was your childhood nickname?</option>
+                                                                <option>What is your favorite movie?</option>
+                                                                <option>What is the name of your favorite pet?</option>
+                                                                <option>What street did you grow up on?</option>
+                                                                <option>What is your mother's maiden name?</option>
                                                             </select>
 												        </div>
 	                                                   </div>

@@ -33,28 +33,6 @@ public class LoginDAOImplementation implements LoginDAO {
         return status;
     }
 
-	@Override
-	public void addMember(Member member) {
-		try {
-            String query = "insert into member (idnumber, firstName, midInitial, lastName, birthday, email, password, secretQuestion, secretAns, occ) values (?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement preparedStatement = conn.prepareStatement( query );
-            preparedStatement.setInt( 1, member.getIdNumber() );
-            preparedStatement.setString( 2, member.getFirstName() );
-            preparedStatement.setString( 3, member.getMidInitial() );
-            preparedStatement.setString( 4, member.getLastName() );
-            preparedStatement.setString( 5, member.getBirthday() );
-            preparedStatement.setString( 6, member.getEmail() );
-            preparedStatement.setString( 7, member.getPassword() );
-            preparedStatement.setString( 8, member.getSecretQuestion() );
-            preparedStatement.setString( 9, member.getSecretAns() );
-            preparedStatement.setString( 10, member.getOcc() );
-
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-	}
 
 	@Override
 	public boolean checkID( int idnumber ) {

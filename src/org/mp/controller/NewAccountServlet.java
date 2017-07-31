@@ -1,7 +1,7 @@
 package org.mp.controller;
 
 import java.io.IOException;
- 
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,16 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.mp.dao.MemberDAO;
 import org.mp.dao.MemberDAOImplementation;
 import org.mp.model.Member;
- 
+
 /**
- * Servlet implementation class RegisterServlet
+ * Servlet implementation class NewAccountServlet
  */
-@WebServlet("/RegisterServlet")
-public class RegisterServlet extends HttpServlet {
-	private MemberDAO memberdao;
+@WebServlet("/NewAccountServlet")
+public class NewAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public RegisterServlet() {
+    private MemberDAO memberdao;
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public NewAccountServlet() {
         memberdao = new MemberDAOImplementation();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -37,9 +41,9 @@ public class RegisterServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//doGet(request, response);
 		Member member = new Member();
 		
+		String role = request.getParameter( "position" );
 		int idNum = Integer.parseInt(request.getParameter( "idnumber" ) );
 		String stringIdNum = request.getParameter( "idnumber" );
 		String firstName = request.getParameter( "firstName" );
@@ -55,11 +59,11 @@ public class RegisterServlet extends HttpServlet {
 	    		lastName != null && birthday != null && email != null &&
 	    		password != null && secretQuestion != null && secretAns != null) {
 	    	
-	    	if(((int) Math.floor(idNum / Math.pow(10, Math.floor(Math.log10(idNum))))) == 1)
-				member.setRole( "stud" );
-			else if(((int) Math.floor(idNum / Math.pow(10, Math.floor(Math.log10(idNum))))) == 2)
-				member.setRole( "fac" );
-			
+	    	if(role.equals("1"))
+	    		member.setRole("mngr");
+	    	else if(role.equals("2"))
+	    		member.setRole("staff");
+	    	
 			member.setIdNumber( idNum );
 			member.setFirstName( firstName );
 	    	member.setMidInitial( midInitial );
@@ -71,11 +75,11 @@ public class RegisterServlet extends HttpServlet {
 	        member.setSecretAns( secretAns );
 
 	        memberdao.addMember(member);
-	        RequestDispatcher view = request.getRequestDispatcher("login.jsp");
+	        RequestDispatcher view = request.getRequestDispatcher("index.jsp");
 		    view.forward(request, response);
 	    }
 	    else {
-	    	RequestDispatcher view = request.getRequestDispatcher("reg.jsp");
+	    	RequestDispatcher view = request.getRequestDispatcher("newAcct.jsp");
 		    view.forward(request, response);
 	    }
 	}

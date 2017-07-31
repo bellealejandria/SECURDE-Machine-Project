@@ -1,8 +1,7 @@
 package org.mp.model;
 
 public class Member {
-	 
-    private int idnumber;
+	private int idnumber;
     private String firstName;
     private String midInitial; 
     private String lastName;
@@ -11,7 +10,23 @@ public class Member {
     private String password;
     private String secretQuestion;
     private String secretAns;
-    private String occ;
+    private String role;
+    
+    public Member() {}
+    
+    public Member(int idnumber, String firstName, String midInitial, String lastName, String birthday, String email,
+			String password, String secretQuestion, String secretAns, String role) {
+		this.idnumber = idnumber;
+		this.firstName = firstName;
+		this.midInitial = midInitial;
+		this.lastName = lastName;
+		this.birthday = birthday;
+		this.email = email;
+		this.password = password;
+		this.secretQuestion = secretQuestion;
+		this.secretAns = secretAns;
+		this.role = role;
+	}
  
     public int getIdNumber() {
         return idnumber;
@@ -67,11 +82,11 @@ public class Member {
     public void setSecretAns(String secretAns) {
         this.secretAns = secretAns;
     }
-    public String getOcc() {
-        return occ;
+    public String getRole() {
+        return role;
     }
-    public void setOcc(String occ) {
-        this.occ = occ;
+    public void setRole(String role) {
+        this.role = role;
     }
     @Override
     public String toString() {
@@ -79,7 +94,7 @@ public class Member {
         		+ ", midInitial=" + midInitial + ", lastName=" + lastName + ", "
         		+ "birthday=" + birthday + ", email=" + email + ", password=" + password
         		+ ", secretQuestion=" + secretQuestion + ", secretAns=" + secretAns + ", "
-        		+ "occ=" + occ +"]";
+        		+ "role=" + role +"]";
     }
  
 }
