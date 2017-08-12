@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.mp.dao.MemberDAO;
 import org.mp.dao.MemberDAOImplementation;
 import org.mp.model.Member;
- 
+
 /**
  * Servlet implementation class RegisterServlet
  */
@@ -30,6 +30,8 @@ public class RegisterServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		RequestDispatcher view = request.getRequestDispatcher("erroracct.html");
+	    view.forward(request, response);
 	}
 
 	/**
@@ -50,6 +52,8 @@ public class RegisterServlet extends HttpServlet {
 	    String password = request.getParameter( "password" );
 	    String secretQuestion = request.getParameter( "secretQuestion" );
 	    String secretAns = request.getParameter( "secretAns" );
+	    
+	    password = new Encrypt().encrypt(password);
 	    
 	    if(stringIdNum != null && firstName != null && midInitial != null && 
 	    		lastName != null && birthday != null && email != null &&

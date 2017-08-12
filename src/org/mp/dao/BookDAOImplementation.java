@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mp.model.Book;
+import org.mp.model.ReserveBook;
 import org.mp.util.DBConn;
 
 public class BookDAOImplementation implements BookDAO {
 	private Connection conn;
+	private ReserveBookDAO resbookdao;
 	
 	public BookDAOImplementation() {
 		conn = DBConn.getConnection();
+		resbookdao = new ReserveBookDAOImplementation();
 	}
-
-	
 	
 	@Override
 	public Book getBook(int idbook) {
@@ -38,6 +39,11 @@ public class BookDAOImplementation implements BookDAO {
             	book.setPublisher(rs.getString("publisher"));
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
+            	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,7 +118,12 @@ public class BookDAOImplementation implements BookDAO {
             	book.setPublisher(rs.getString("publisher"));
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
-
+            	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
+            	
             	books.add(book);
             }
 		} catch (SQLException e) {
@@ -140,7 +151,12 @@ public class BookDAOImplementation implements BookDAO {
             	book.setPublisher(rs.getString("publisher"));
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
-
+            	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
+            	
             	books.add(book);
             }
 		} catch (SQLException e) {
@@ -169,7 +185,12 @@ public class BookDAOImplementation implements BookDAO {
             	book.setPublisher(rs.getString("publisher"));
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
-
+            	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
+            	
             	books.add(book);
             }
 		} catch (SQLException e) {
@@ -198,6 +219,11 @@ public class BookDAOImplementation implements BookDAO {
             	book.setPublisher(rs.getString("publisher"));
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
+            	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
             	
             	books.add(book);
             }
@@ -228,6 +254,11 @@ public class BookDAOImplementation implements BookDAO {
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
             	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
+            	
             	books.add(book);
             }
 		} catch (SQLException e) {
@@ -254,6 +285,11 @@ public class BookDAOImplementation implements BookDAO {
             	book.setPublisher(rs.getString("publisher"));
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
+            	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
             	
             	books.add(book);
             }
@@ -282,6 +318,11 @@ public class BookDAOImplementation implements BookDAO {
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
             	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
+            	
             	books.add(book);
             }
 		} catch (SQLException e) {
@@ -309,6 +350,11 @@ public class BookDAOImplementation implements BookDAO {
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
 
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
+            	
             	books.add(book);
             }
 		} catch (SQLException e) {
@@ -335,12 +381,33 @@ public class BookDAOImplementation implements BookDAO {
             	book.setPublisher(rs.getString("publisher"));
             	book.setLocation(rs.getString("location"));
             	book.setStatus(rs.getInt("status"));
-
+            	
+            	if(rs.getInt("status") == 1 || rs.getInt("status") == 2 ) {
+            		ReserveBook reserve = resbookdao.getReserveBookByIdBook(rs.getInt("idbook"));
+            		book.setDateTo(reserve.getDateTo());
+            	}
+            	
             	books.add(book);
             }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return books;
+	}
+
+	@Override
+	public void deleteBook(int idBook) {
+		try {			
+			String query = "DELETE FROM book WHERE idbook = ?";
+			PreparedStatement preparedStatement = conn.prepareStatement( query );
+			preparedStatement.setInt(1, idBook);
+			
+			preparedStatement.executeUpdate();
+            preparedStatement.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

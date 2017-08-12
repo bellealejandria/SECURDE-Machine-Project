@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<% if(session.getAttribute("idNumber") == null) response.sendRedirect("login.jsp");	
+int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = login.jsp"); %>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -19,12 +24,67 @@
 </head>
 <body>
 <div class="wrapper">
-        <!--<nav class="navbar navbar-default navbar-absolute">
-            
-                <div class="container-fluid">
-				    <img class="logo" width="50px" src="assets/img/logo.png"> Library
-                </div>
-            </nav>-->
+    <nav class="navbar navbar-transparent navbar-absolute">
+		<div class="container-fluid">
+			<div class="navbar-header" onclick="location.href='HomeServlet';">
+				<button type="button" class="navbar-toggle" data-toggle="collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand">SHS Library</a>
+			</div>
+
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="material-icons">dashboard</i>
+							<p class="hidden-lg hidden-md">Main Menu</p>
+						</a>
+						<ul class="dropdown-menu">
+							<c:choose> 
+								<c:when test="${sessionScope.role == 'admin'}">
+									<li onclick="location.href='AdminCreateStaffServlet';"><a>Create Staff</a></li>
+									<li><a href="#">Export</a></li>
+								</c:when>
+
+								<c:when test="${sessionScope.role == 'mngr'}">
+									<li onclick="location.href='MngrAddBookServlet';"><a>Add Book</a></li>
+									<li onclick="location.href='MngrEditBookServlet';"><a>Edit Book</a></li>
+									<li onclick="location.href='MngrOverBookServlet';"><a>Override Book Reservations</a></li>
+									<li onclick="location.href='MngrOverRoomServlet';"><a>Override Room Reservations</a></li>
+									<li><a href="#">Export</a></li>
+								</c:when>
+								<c:when test="${sessionScope.role == 'staff'}">
+									<li onclick="location.href='StaffAddBookServlet';"><a>Add Book</a></li>
+									<li onclick="location.href='StaffEditBookServlet';"><a>Edit Book</a></li>
+									<li onclick="location.href='StaffViewRoomServlet';"><a>View Rooms</a></li>
+								</c:when>
+								<c:when test="${sessionScope.role == 'stud'}">
+									<li onclick="location.href='StudResBookServlet';"><a>Reserve Book</a></li>
+									<li onclick="location.href='StudResRoomServlet';"><a>Reserve Room</a></li>
+								</c:when>
+								<c:when test="${sessionScope.role == 'fac'}">
+									<li onclick="location.href='FacResBookServlet';"><a>Reserve Book</a></li>
+									<li onclick="location.href='FacResRoomServlet';"><a>Reserve Room</a></li>
+								</c:when>
+							</c:choose>
+						</ul>
+					</li>
+					<li class="dropdown" onclick="location.href='LogOutServlet';">
+						<a>
+							<i class="material-icons">exit_to_app</i>
+							<p class="hidden-lg hidden-md">Log out</p>
+						</a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
 
 	    <div class="main-panel">
 			<div class="content">
@@ -44,7 +104,7 @@
                                                     <li class="active">
 													<a href="#profile" data-toggle="tab">
 														<i class="material-icons">vpn_key</i>
-														Add Book
+														Reserve Book
                                                         
 													<div class="ripple-container"></div></a>
 												    </li>
@@ -60,7 +120,7 @@
 										<div class="tab-pane active" id="profile">
                                             
                                             <div class="card-content table-responsive">
-                                                <form action="AddBookServlet" method="post"> 	
+                                                <form action="ReserveBookServlet" method="post"> 	
                                                 	
                                                 	
 
@@ -68,36 +128,18 @@
                                                         <div class="col-md-12">
 													        <div class="form-group label-floating">
 	                                                            <label class="control-label">Title</label>
-	                                                            <input type="text" id="title" name="title" class="form-control" >
+	                                                            ${book.title}
 													        </div>
 	                                                   	</div>
 	                                                </div>
 	                                                
-	                                                <div class="row">
-                                                        <div class="col-md-12">
-                                                            <label class="control-label">Classification</label>
-												            <div class="form-group label-floating">
-	                                                            <select type="text" id="location" name="location" class="form-control" >
-	                                                                <option value="C1">Computer Science, Information, and General Works</option>
-	                                                                <option value="C2">Philosophy and Psychology</option>
-	                                                                <option value="C3">Religion</option>
-	                                                                <option value="C4">Social Sciences</option>
-	                                                                <option value="C5">Language</option>
-	                                                                <option value="C6">Natural Science</option>
-	                                                                <option value="C7">Technology and Applied Science</option>
-	                                                                <option value="C8">Arts and Recreation</option>
-	                                                                <option value="C9">Literature</option>
-	                                                                <option value="C10">History and Geography</option>
-	                                                            </select>
-												       		</div>
-	                                                   	</div>
-                                                    </div>
+	                                               
 
 	                                                <div class="row">
                                                         <div class="col-md-12">
 													        <div class="form-group label-floating">
 	                                                            <label class="control-label">Author</label>
-	                                                            <input type="text" id="author" name="author" class="form-control" >
+	                                                            ${book.author}
 													        </div>
 	                                                   </div>
                                                     </div>
@@ -107,7 +149,7 @@
                                                         <div class="col-md-12">
 													        <div class="form-group label-floating">
 	                                                            <label class="control-label">Publisher</label>
-	                                                            <input type="text" id="publisher" name="publisher" class="form-control" >
+	                                                            ${book.publisher}
 													        </div>
 	                                                   	</div>
 	                                                </div>
@@ -116,14 +158,31 @@
                                                         <div class="col-md-12">
 													        <div class="form-group label-floating">
 	                                                            <label class="control-label">Year</label>
-	                                                            <input type="number" id="year" name="year" maxlength="4" min="1000" max="2017" class="form-control" >
+	                                                            ${book.year}
 													        </div>
 	                                                   </div>
                                                     </div>
-                                                                                     
+                                                    <div class="row">
+                                                        <div class="col-md-12"><label class="control-label">Reservation Date</label>
+                                                            <div class="form-group label-floating">
+												                
+                                                                <input type="date" id="dateFrom" name="dateFrom" class="form-control" >
+	                                                       </div>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12"><label class="control-label">Anticipated Date</label>
+                                                            <div class="form-group label-floating">
+												                
+                                                                <input type="date" id="dateTo" name="dateTo" class="form-control" >
+	                                                       </div>
+                                                        </div>
+                                                        
+                                                    </div>                                 
                                                     
-                                                
-                                                 <button type="submit" name="addbook" onClick="return empty()" class="btn btn-block btn-success">Add Book</button>
+                                                 <button type="submit" name="reserve" value="${book.idBook}" onClick="return empty()" class="btn btn-block btn-success">Reserve Book</button>
 	                                             <div class="clearfix"></div>
                                                 
                                                 </form>
@@ -171,16 +230,12 @@
 	
 	<script>
 		function empty() {
-		    var title, loc, author, pub, year;
+		    var df, dt;
 		    
-		    title = document.getElementById("title").value;
-		    loc = document.getElementById("location").value;
-		    author = document.getElementById("author").value;
-		    pub = document.getElementById("publisher").value;
-		    year = document.getElementById("year").value;
-		   
+		    df = document.getElementById("dateFrom").value;
+		    dt = document.getElementById("dateTo").value;
 		    
-		    if (title == "" || loc == "" || author == "" || pub == "" || year == "") {
+		    if (df == "" || dt == "") {
 		        alert("Fields cannot be empty");
 		        return false;
 		    };

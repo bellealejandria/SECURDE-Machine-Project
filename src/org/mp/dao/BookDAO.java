@@ -9,6 +9,7 @@ public interface BookDAO {
 	public Book getBook(int idBook);
 	public void addBook(Book book);
 	public void updateBook(Book book);
+	public void deleteBook(int idBook);
 	
 	public List<Book> getAllBooks();
 	public List<Book> filterByTitle(String search);

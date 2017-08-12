@@ -37,6 +37,8 @@ public class AddBookServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		RequestDispatcher view = request.getRequestDispatcher("erroracct.html");
+	    view.forward(request, response);
 	}
 
 	/**
@@ -84,7 +86,7 @@ public class AddBookServlet extends HttpServlet {
     	ArrayList <Book> books = (ArrayList<Book>) bookdao.getAllBooks();
 		request.setAttribute("listOfBooks", books);
 		
-        RequestDispatcher view = request.getRequestDispatcher("viewBooks.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/viewBooks.jsp");
 	    view.forward(request, response);
 
 

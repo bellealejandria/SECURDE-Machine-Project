@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<% if(session.getAttribute("idNumber") == null) response.sendRedirect("login.jsp");	
+int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = login.jsp"); %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -17,19 +20,25 @@
 
     <link href="bootstrap/fonts/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+    
 </head>
 <body>
+<c:if test="${sessionScope.role ==  'mngr'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+<c:if test="${sessionScope.role ==  'staff'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+<c:if test="${sessionScope.role ==  'stud'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+<c:if test="${sessionScope.role ==  'fac'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+
 <div class="wrapper">
 	<nav class="navbar navbar-transparent navbar-absolute">
 		<div class="container-fluid">
-			<div class="navbar-header">
+			<div class="navbar-header" onclick="location.href='HomeServlet';">
 				<button type="button" class="navbar-toggle" data-toggle="collapse">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="${pageContext.request.contextPath}/HomeServlet">SHS Library</a>
+				<a class="navbar-brand">SHS Library</a>
 			</div>
 
 			<div class="collapse navbar-collapse">
@@ -42,36 +51,35 @@
 						<ul class="dropdown-menu">
 							<c:choose> 
 								<c:when test="${sessionScope.role == 'admin'}">
-									<li><a href="${pageContext.request.contextPath}/AdminGoToServlet?action=newacct">Create Staff</a></li>
+									<li onclick="location.href='AdminCreateStaffServlet';"><a>Create Staff</a></li>
 									<li><a href="#">Export</a></li>
 								</c:when>
 
 								<c:when test="${sessionScope.role == 'mngr'}">
-									<li><a href="${pageContext.request.contextPath}/MngrGoToServlet?action=addbook">Add Book</a></li>
-									<li><a href="${pageContext.request.contextPath}/MngrGoToServlet?action=editbook">Edit Book</a></li>
-									<li><a href="#">Override Book Reservations</a></li>
-									<li><a href="#">Override Room Reservations</a></li>
+									<li onclick="location.href='MngrAddBookServlet';"><a>Add Book</a></li>
+									<li onclick="location.href='MngrEditBookServlet';"><a>Edit Book</a></li>
+									<li onclick="location.href='MngrOverBookServlet';"><a>Override Book Reservations</a></li>
+									<li onclick="location.href='MngrOverRoomServlet';"><a>Override Room Reservations</a></li>
 									<li><a href="#">Export</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'staff'}">
-									<li><a href="${pageContext.request.contextPath}/StaffGoToServlet?action=addbook">Add Book</a></li>
-									<li><a href="${pageContext.request.contextPath}/StaffGoToServlet?action=editbook">Edit Book</a></li>
-									<li><a href="#">View Books</a></li>
-									<li><a href="#">View Meeting Rooms</a></li>
+									<li onclick="location.href='StaffAddBookServlet';"><a>Add Book</a></li>
+									<li onclick="location.href='StaffEditBookServlet';"><a>Edit Book</a></li>
+									<li onclick="location.href='StaffViewRoomServlet';"><a>View Rooms</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'stud'}">
-								<li><a href="#">Reserve Book</a></li>
-								<li><a href="#">Reserve Meeting Room</a></li>
+									<li onclick="location.href='StudResBookServlet';"><a>Reserve Book</a></li>
+									<li onclick="location.href='StudResRoomServlet';"><a>Reserve Room</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'fac'}">
-								<li><a href="#">Reserve Book</a></li>
-								<li><a href="#">Reserve Meeting Room</a></li>
+									<li onclick="location.href='FacResBookServlet';"><a>Reserve Book</a></li>
+									<li onclick="location.href='FacResRoomServlet';"><a>Reserve Room</a></li>
 								</c:when>
 							</c:choose>
 						</ul>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<li class="dropdown" onclick="location.href='LogOutServlet';">
+						<a>
 							<i class="material-icons">exit_to_app</i>
 							<p class="hidden-lg hidden-md">Log out</p>
 						</a>

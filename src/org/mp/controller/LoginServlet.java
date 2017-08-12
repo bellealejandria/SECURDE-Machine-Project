@@ -15,6 +15,7 @@ import org.mp.dao.LoginDAOImplementation;
 import org.mp.dao.MemberDAO;
 import org.mp.dao.MemberDAOImplementation;
 import org.mp.model.Member;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Servlet implementation class LoginServlet
@@ -25,9 +26,9 @@ public class LoginServlet extends HttpServlet {
     private LoginDAO logindao;
     private MemberDAO memberdao;
     private static final long serialVersionUID = 1L;
-    public static final String INDEX = "/index.jsp";
-    public static final String LOGIN = "/login.jsp";
-    public static final String REG = "/reg.jsp";
+    public static final String INDEX = "/WEB-INF/jsp/index.jsp";
+    public static final String LOGIN = "login.jsp";
+    public static final String REG = "reg.jsp";
  
     public LoginServlet() {
         logindao = new LoginDAOImplementation();
@@ -40,6 +41,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 	}
 
 	/**
@@ -48,35 +50,58 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
         if(request.getParameter("login") != null) {
-            int idnumber = Integer.parseInt( request.getParameter("idnumber") );
+            int idnumber = Integer.parseInt( request.getParameter("idnumber"));
             String password = request.getParameter("password");
-    		  
+            password = new Encrypt().encrypt(password);
+            
+            int lockCount = 5;
+            int loginCount = logindao.getLoginAttempt(idnumber);
+            
             boolean validate = logindao.validate(idnumber, password);
-    		  
-            if(validate) {
+            
+            if(validate && (loginCount != lockCount)) {
+            	
+     			logindao.updateLogin(idnumber, 0);
+     			
     			Member memDetails = memberdao.getMember(idnumber);
-    			request.setAttribute("member", memDetails.getFirstName());
+    			
+    			
+    			
     			HttpSession session = request.getSession();
     			switch(memDetails.getRole()) {
     				case "admin": 	session.setAttribute("role", "admin");
+    								session.setAttribute("idNumber", memDetails.getIdNumber());
     								break;
     				case "mngr":	session.setAttribute("role", "mngr");
+									session.setAttribute("idNumber", memDetails.getIdNumber());
 									break;
     				case "staff":	session.setAttribute("role", "staff");
+									session.setAttribute("idNumber", memDetails.getIdNumber());
 									break;
     				case "stud":	session.setAttribute("role", "stud");
+									session.setAttribute("idNumber", memDetails.getIdNumber());
 									break;
     				case "fac":		session.setAttribute("role", "fac");
+									session.setAttribute("idNumber", memDetails.getIdNumber());
 									break;
     			}
     			RequestDispatcher view = request.getRequestDispatcher(INDEX);
     		    view.forward(request, response);
             }
-            else {
+            else if(loginCount < lockCount){
     			System.out.println("Incorrect username/password");
+    			
+    			int tempCtr = loginCount+1;
+    			
+    			logindao.updateLogin(idnumber, tempCtr);
+    			
     			RequestDispatcher view = request.getRequestDispatcher(LOGIN);
     		    view.forward(request, response);
-            }		
+            }
+            else {
+            	RequestDispatcher view = request.getRequestDispatcher("acctlock.html");
+    		    view.forward(request, response);
+            }
 		}
     			
         
@@ -84,6 +109,26 @@ public class LoginServlet extends HttpServlet {
         	RequestDispatcher view = request.getRequestDispatcher(REG);
 		    view.forward(request, response);
         }
+        else if(request.getParameter("save") != null) {
+        	HttpSession session = request.getSession();
+    		int sessionID = Integer.parseInt(session.getAttribute("idNumber").toString());
+    		
+    		//encrypt typed old password
+        	String oldpw = request.getParameter("oldpw");
+    	    oldpw = new Encrypt().encrypt(oldpw);
+    	    
+    	    System.out.println(sessionID);
+    	    
+    	    //compare pw from db and if same set newpw as password
+    	    if(logindao.getPass(sessionID) == oldpw) {
+    	    	String newpw = request.getParameter("newpw");
+    	    	newpw = new Encrypt().encrypt(newpw);
+    	    	System.out.println(newpw);
+    	    	logindao.changePass(newpw, sessionID);
+    	    }
+        	
+        }
+
 	}
 
 }

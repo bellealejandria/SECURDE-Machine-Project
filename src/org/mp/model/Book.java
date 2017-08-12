@@ -10,12 +10,12 @@ public class Book {
 	private String publisher;
 	private int year;
 	private int status;
-
+	private String dateTo;
 	
 	public Book() {}
 
-	public Book(int idBook, String title, String location, String author, String publisher,
-			int year, int status) {
+	public Book(int idBook, String title, String location, String author, String publisher, int year, int status,
+			String dateTo) {
 		this.idBook = idBook;
 		this.title = title;
 		this.location = location;
@@ -23,6 +23,7 @@ public class Book {
 		this.publisher = publisher;
 		this.year = year;
 		this.status = status;
+		this.dateTo = dateTo;
 	}
 
 	public int getIdBook() {
@@ -81,13 +82,21 @@ public class Book {
 		this.status = status;
 	}
 
+	public String getDateTo() {
+		return dateTo;
+	}
+
+	public void setDateTo(String dateTo) {
+		this.dateTo = dateTo;
+	}
 
 	@Override
 	public String toString() {
 		return "Book [idBook=" + idBook + ", title=" + title + ", location=" + location + ", author=" + author
-				+ ", publisher=" + publisher + ", year=" + year + ", status=" + status +  "]";
+				+ ", publisher=" + publisher + ", year=" + year + ", status=" + status + ", dateTo=" + dateTo + "]";
 	}
 
+	
 	
 	
 	

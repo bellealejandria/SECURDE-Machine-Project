@@ -66,7 +66,7 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">ID Number</label>
-                                                            <input type="number" name="idnumber" maxlength="8" min="10000000" max="20179999"  class="form-control" >
+                                                            <input type="number" id="idnumber" name="idnumber" maxlength="8" min="10000000" max="20179999"  class="form-control" >
 												        </div>
 	                                                   </div>
                                                     </div>
@@ -75,21 +75,21 @@
                                                         <div class="col-md-4">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">First name</label>
-                                                            <input type="text" name="firstName" class="form-control" >
+                                                            <input type="text" id="firstname" name="firstName" class="form-control" >
 												        </div>
 	                                                   </div>
                                                          
                                                         <div class="col-md-4">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">Middle initial</label>
-                                                            <input type="text" maxlength="2" name="midInitial" class="form-control" >
+                                                            <input type="text" id="midinit" maxlength="2" name="midInitial" class="form-control" >
 												        </div>
 	                                                   </div>
                                                          
                                                         <div class="col-md-4">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">Last name</label>
-                                                            <input type="text" name="lastName" class="form-control" >
+                                                            <input type="text" id="lastname" name="lastName" class="form-control" >
 												        </div>
 	                                                   </div>
                                                     
@@ -98,7 +98,7 @@
                                                         <div class="col-md-12"><label class="control-label">Birthday</label>
                                                             <div class="form-group label-floating">
 												                
-                                                                <input type="date" name="birthday" class="form-control" >
+                                                                <input type="date" id="bday" name="birthday" class="form-control" >
 	                                                       </div>
                                                         </div>
                                                         
@@ -107,7 +107,7 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">E-mail</label>
-                                                            <input type="email" name="email" class="form-control" >
+                                                            <input type="email" id="email" name="email" class="form-control" >
 												        </div>
 	                                                   </div>
                                                     </div>
@@ -115,7 +115,7 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">Password</label>
-                                                            <input type="password" name="password" class="form-control" >
+                                                            <input type="password" id="password" name="password" title="Password must be 8 characters including 1 uppercase letter, 1 lowercase letter and numeric characters" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" >
 												        </div>
 	                                                   </div>
                                                     </div>                                            
@@ -138,14 +138,14 @@
                                                         <div class="col-md-6">
                                                             <label class="control-label">Secret Answer</label>
 												            <div class="form-group label-floating">
-                                                           <input type="password" name="secretAns" class="form-control" >
+                                                           <input type="text" id="secans" name="secretAns" class="form-control" >
 												        </div>
 	                                                   </div>
                                                     
                                                     </div>
                                                     
                                                 
-                                                 <button type="submit" name="register" class="btn btn-block btn-success">Sign Up</button>
+                                                 <button type="submit" name="register" onClick="return empty()" class="btn btn-block btn-success">Sign Up</button>
 	                                             <div class="clearfix"></div>
                                                 
                                                 </form>
@@ -190,4 +190,24 @@
 
 	<!-- Material Dashboard javascript methods -->
 	<script src="bootstrap/js/material-dashboard.js"></script>	
+	
+	<script>
+		function empty() {
+		    var idnum, fname, mname, lname, email, bday, password, secans;
+		    
+		    idnum = document.getElementById("idnumber").value;
+		    fname = document.getElementById("firstname").value;
+		    mname = document.getElementById("midinit").value;
+		    lname = document.getElementById("lastname").value;
+		    email = document.getElementById("email").value;
+		    bday = document.getElementById("bday").value;
+		    password = document.getElementById("password").value;
+		    secans = document.getElementById("secans").value;
+		  
+		    if (idnum == "" || fname == "" || mname == "" || lname == "" || email == "" || bday == "" || password == "" || secans == "" ) {
+		        alert("Fields cannot be empty");
+		        return false;
+		    };
+		}
+	</script>	
 </html>

@@ -29,8 +29,7 @@ public class HomeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		RequestDispatcher view = request.getRequestDispatcher("index.jsp");
-	    view.forward(request, response);
+		doPost(request,response);
 	}
 
 	/**
@@ -38,7 +37,9 @@ public class HomeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		RequestDispatcher view = request.getRequestDispatcher("WEB-INF/jsp/index.jsp");
+	    view.forward(request, response);
 	}
 
 }

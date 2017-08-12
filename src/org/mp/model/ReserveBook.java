@@ -4,15 +4,20 @@ public class ReserveBook {
 	private int idbook_reservation;
 	private int idnumber;
 	private int idbook;
+	private String title;
+	private int status;
 	private String dateFrom;
 	private String dateTo;
 	
 	public ReserveBook() {}
 
-	public ReserveBook(int idbook_reservation, int idnumber, int idbook, String dateFrom, String dateTo) {
+	public ReserveBook(int idbook_reservation, int idnumber, int idbook, String title, int status, String dateFrom,
+			String dateTo) {
 		this.idbook_reservation = idbook_reservation;
 		this.idnumber = idnumber;
 		this.idbook = idbook;
+		this.title = title;
+		this.status = status;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
 	}
@@ -41,6 +46,22 @@ public class ReserveBook {
 		this.idbook = idbook;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	public String getDateFrom() {
 		return dateFrom;
 	}
@@ -60,9 +81,10 @@ public class ReserveBook {
 	@Override
 	public String toString() {
 		return "ReserveBook [idbook_reservation=" + idbook_reservation + ", idnumber=" + idnumber + ", idbook=" + idbook
-				+ ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + "]";
+				+ ", title=" + title + ", status=" + status + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + "]";
 	}
 
+	
 	
 
 	

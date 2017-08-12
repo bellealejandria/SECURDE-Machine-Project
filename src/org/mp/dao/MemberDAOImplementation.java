@@ -30,6 +30,7 @@ public class MemberDAOImplementation implements MemberDAO {
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()) {
+            	member.setIdNumber(idnumber);
             	member.setFirstName(rs.getString("firstName"));
             	member.setLastName(rs.getString("lastName"));
             	member.setBirthday(rs.getString("birthday"));
@@ -64,6 +65,7 @@ public class MemberDAOImplementation implements MemberDAO {
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }

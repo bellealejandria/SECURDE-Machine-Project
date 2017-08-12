@@ -10,23 +10,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mp.dao.BookDAO;
-import org.mp.dao.BookDAOImplementation;
-import org.mp.model.Book;
+import org.mp.dao.ReserveRoomDAO;
+import org.mp.dao.ReserveRoomDAOImplementation;
+import org.mp.model.ReserveRoom;
 
 /**
- * Servlet implementation class StaffGoToServlet
+ * Servlet implementation class MngrOverRoomServlet
  */
-@WebServlet("/StaffGoToServlet")
-public class StaffGoToServlet extends HttpServlet {
+@WebServlet("/MngrOverRoomServlet")
+public class MngrOverRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private BookDAO bookdao;
+	private ReserveRoomDAO resroomdao;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public StaffGoToServlet() {
-    	bookdao = new BookDAOImplementation();
+    public MngrOverRoomServlet() {
+    	resroomdao = new ReserveRoomDAOImplementation();
         // TODO Auto-generated constructor stub
     }
 
@@ -34,26 +34,9 @@ public class StaffGoToServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
-		//add book
-		if(action.equals("addbook")) {
-			RequestDispatcher view = request.getRequestDispatcher("addBook.jsp");
-		    view.forward(request, response);
-		}
-		
-		//edit book
-		else if(action.equals("editbook")) {
-			ArrayList <Book> books = (ArrayList<Book>) bookdao.getAllBooks();
-			request.setAttribute("listOfBooks", books);
-			
-			RequestDispatcher view = request.getRequestDispatcher("viewBooks.jsp");
-		    view.forward(request, response);
-		}
-		
-		//view meeting rooms
-		else if(action.equals("viewrooms")) {
-			
-		}
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+		doPost(request, response);
 	}
 
 	/**
@@ -61,7 +44,11 @@ public class StaffGoToServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		ArrayList <ReserveRoom> resRooms = (ArrayList<ReserveRoom>) resroomdao.getAllReserveRooms();
+		request.setAttribute("listOfReserveRooms", resRooms);
+		
+    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/overrideRoom.jsp");
+	    view.forward(request, response);
 	}
 
 }

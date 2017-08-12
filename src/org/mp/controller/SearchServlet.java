@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.mp.dao.BookDAO;
 import org.mp.dao.BookDAOImplementation;
@@ -36,6 +37,14 @@ public class SearchServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		if(request.getParameter("searchButton") != null) {
 			
 			String search = request.getParameter("stringToSearch");
@@ -86,18 +95,17 @@ public class SearchServlet extends HttpServlet {
 					request.setAttribute("listOfBooks", books);
 				}
 			}
-
-			RequestDispatcher view = request.getRequestDispatcher("editBook.jsp");
-		    view.forward(request, response);
+			
+			String session = request.getSession(false).getAttribute("role").toString();
+			if(session.equalsIgnoreCase("mngr") || session.equalsIgnoreCase("staff")) {
+				RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/editBook.jsp");
+			    view.forward(request, response);
+			}
+			else if(session.equalsIgnoreCase("stud") || session.equalsIgnoreCase("fac")){
+				RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/reserveBook.jsp");
+			    view.forward(request, response);
+			}
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 		
 	}
 

@@ -34,6 +34,8 @@ public class NewAccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		RequestDispatcher view = request.getRequestDispatcher("erroracct.html");
+	    view.forward(request, response);
 	}
 
 	/**
@@ -75,11 +77,11 @@ public class NewAccountServlet extends HttpServlet {
 	        member.setSecretAns( secretAns );
 
 	        memberdao.addMember(member);
-	        RequestDispatcher view = request.getRequestDispatcher("index.jsp");
+	        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");
 		    view.forward(request, response);
 	    }
 	    else {
-	    	RequestDispatcher view = request.getRequestDispatcher("newAcct.jsp");
+	    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/newAcct.jsp");
 		    view.forward(request, response);
 	    }
 	}

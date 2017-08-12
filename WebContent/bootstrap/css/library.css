@@ -1,22 +1,10 @@
-/*!
-    
- =========================================================
- * Material Dashboard - v1.1.1.0
- =========================================================
- 
- * Product Page: http://www.creative-tim.com/product/material-dashboard
- * Copyright 2017 Creative Tim (http://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/material-dashboard/blob/master/LICENSE.md)
- 
- =========================================================
- 
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- 
- */
- 
-/* ANIMATION */
-/* SHADOWS */
-/* Shadows (from mdl http://www.getmdl.io/) */
+.text-white{
+    color: #fff;
+}
+
+.text-black{
+    color: #000;
+}
 .noUi-target,
 .noUi-target * {
   -webkit-touch-callout: none;
@@ -106,6 +94,8 @@
 .noUi-origin[style^="left: 0"] .noUi-handle.noUi-active {
   border-width: 1px;
 }
+
+
 
 .noUi-target {
   border-radius: 3px;
@@ -5062,4 +5052,24 @@ footer .btn {
     margin-left: -20px;
     margin-right: -20px;
   }
+}
+
+.table-reserve{
+     border: 3px solid #F5F5F5;
+}
+
+.reserve-taken{
+    background-color: #D32F2F;
+}
+
+.reserve-available{
+    background-color: #B2FF59;
+}
+
+.table-no-border{
+    border: none;
+}
+
+#reserve-room-1{
+    display:none;
 }

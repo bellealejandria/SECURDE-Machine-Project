@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.mp.dao.BookDAO;
 import org.mp.dao.BookDAOImplementation;
@@ -25,14 +26,12 @@ public class EditBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private BookDAO bookdao;
 	private ReserveBookDAO resbookdao;
-       
     /**
      * @see HttpServlet#HttpServlet()
      */
     public EditBookServlet() {
     	bookdao = new BookDAOImplementation();
     	resbookdao = new ReserveBookDAOImplementation();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -41,7 +40,8 @@ public class EditBookServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		System.out.println("Here");
+		RequestDispatcher view = request.getRequestDispatcher("erroracct.html");
+	    view.forward(request, response);
 	}
 
 	/**
@@ -58,7 +58,6 @@ public class EditBookServlet extends HttpServlet {
 			String author = request.getParameter( "author" );
 			String publisher = request.getParameter( "publisher" );
 			int year = Integer.parseInt(request.getParameter( "year" ) );
-			int status = Integer.parseInt(request.getParameter( "status" ));
 			
 			
 			String location = request.getParameter("location");
@@ -89,19 +88,33 @@ public class EditBookServlet extends HttpServlet {
 	    	book.setAuthor( author );
 	    	book.setPublisher( publisher );
 	    	book.setYear( year );
-	    	book.setStatus( status );
 	    	
 	    	bookdao.updateBook(book);
 	    	
 	    	ArrayList <Book> books = (ArrayList<Book>) bookdao.getAllBooks();
 			request.setAttribute("listOfBooks", books);
 			
-	    	RequestDispatcher view = request.getRequestDispatcher("editBook.jsp");
+	    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/editBook.jsp");
 		    view.forward(request, response);
 	    	
 		}
 
 		else if(request.getParameter("delete") != null) {
+			
+			int id = Integer.parseInt(request.getParameter("delete"));
+			
+			if(request.getSession(false).getAttribute("role").equals("mngr")) {
+				resbookdao.deleteByIdbook(id);
+			}
+			
+			bookdao.deleteBook(id);
+			
+			ArrayList <Book> books = (ArrayList<Book>) bookdao.getAllBooks();
+			request.setAttribute("listOfBooks", books);
+			
+			
+	    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/editBook.jsp");
+		    view.forward(request, response);
 			
 		}
 	}

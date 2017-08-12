@@ -68,7 +68,7 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">Username</label>
-                                                            <input type="text" class="form-control" name="idnumber">
+                                                            <input type="text" id="idnumber" class="form-control" name="idnumber">
 												        </div>
 	                                                   </div>
                                                     
@@ -79,13 +79,13 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">Password</label>
-                                                            <input type="password" class="form-control" name="password">
+                                                            <input type="password" id="password" class="form-control" name="password">
 												        </div>
 	                                                   </div>
                                                     
                                                     </div>
                                                 
-                                                 <button type="submit" name="login" class="btn btn-block btn-success">Login</button>
+                                                 <button type="submit" name="login" onclick="return empty()" class="btn btn-block btn-success">Login</button>
                                                  <button type="submit" name="signup" class="btn btn-block btn-primary">Register</button>
                                                 
 	                                             <div class="clearfix"></div>
@@ -133,6 +133,20 @@
 
 	<!-- Material Dashboard javascript methods -->
 	<script src="bootstrap/js/material-dashboard.js"></script>
+	
+	<script>
+		function empty() {
+		    var idnum, pw;
+		    
+		    idnum = document.getElementById("idnumber").value;
+		    pw = document.getElementById("password").value;
+		   
+		    if (idnum == "" || pw == "") {
+		        alert("Fields cannot be empty");
+		        return false;
+		    };
+		}
+	</script>	
 
 </html>
 
