@@ -5,23 +5,22 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class LogOutServlet
+ * Servlet implementation class MngrGoToAddBookServlet
  */
-@WebServlet("/LogOutServlet")
-public class LogOutServlet extends HttpServlet {
+@WebServlet("/MngrGoToAddBookServlet")
+public class MngrGoToAddBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogOutServlet() {
+    public MngrGoToAddBookServlet() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -39,12 +38,7 @@ public class LogOutServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession newsession = request.getSession(false);
-	    if (newsession != null) {
-	         newsession.invalidate();
-	    }
-	    
-	    RequestDispatcher view = request.getRequestDispatcher("/login.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/addBook.jsp");
 	    view.forward(request, response);
 	}
 

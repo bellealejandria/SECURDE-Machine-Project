@@ -4,38 +4,29 @@
   <welcome-file-list>
     <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
-  
- <error-page>
+  <error-page>
     <location>/erroracct.html</location>
- </error-page>
- <error-page>
-    <!-- Missing login -->
+  </error-page>
+  <error-page>
     <error-code>401</error-code>
     <location>/erroracct.html</location>
-</error-page>
-<error-page>
-    <!-- Forbidden directory listing -->
+  </error-page>
+  <error-page>
     <error-code>403</error-code>
     <location>/erroracct.html</location>
-</error-page>
-<error-page>
-    <!-- Missing resource -->
+  </error-page>
+  <error-page>
     <error-code>404</error-code>
     <location>/erroracct.html</location>
-</error-page>
-<error-page>
-    <!-- Uncaught exception -->
+  </error-page>
+  <error-page>
     <error-code>500</error-code>
     <location>/erroracct.html</location>
-</error-page>
-<error-page>
-    <!-- Unsupported servlet method -->
+  </error-page>
+  <error-page>
     <error-code>503</error-code>
     <location>/erroracct.html</location>
-</error-page>
-  
-  
-  
+  </error-page>
   <session-config>
     <session-timeout>1</session-timeout>
   </session-config>

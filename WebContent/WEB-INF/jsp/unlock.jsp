@@ -4,11 +4,11 @@
 <% int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = expiredpage.html"); %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
-	<title>Add Book</title>
+	<title>Library</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -20,14 +20,16 @@
     <link href="bootstrap/fonts/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
 <c:if test="${sessionScope.idNumber ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
-<c:if test="${sessionScope.role ==  'admin'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'mngr'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'staff'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
-
-<div class="wrapper">
+<c:if test="${sessionScope.role ==  'stud'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+<c:if test="${sessionScope.role ==  'fac'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+	
+	<div class="wrapper">
     <nav class="navbar navbar-transparent navbar-absolute">
 		<div class="container-fluid">
 			<div class="navbar-header" onclick="location.href='HomeServlet';">
@@ -94,10 +96,15 @@
 		</div>
 	</nav>
 
-
-
+    
 	    <div class="main-panel">
 			<div class="content">
+
+				<c:if test="${trigger ==  1}">
+				    <div class="alert alert-success">
+				    	<strong>Success! </strong>Unlocked account!
+					</div>
+				</c:if>
 					<div class="row">
                         <div class="col-md-4">
                         
@@ -114,7 +121,7 @@
                                                     <li class="active">
 													<a href="#profile" data-toggle="tab">
 														<i class="material-icons">vpn_key</i>
-														Reserve Book
+														Unlock Account
                                                         
 													<div class="ripple-container"></div></a>
 												    </li>
@@ -130,69 +137,20 @@
 										<div class="tab-pane active" id="profile">
                                             
                                             <div class="card-content table-responsive">
-                                                <form action="ReserveBookServlet" method="post"> 	
-                                                	
-                                                	
-
-                                                	<div class="row">
-                                                        <div class="col-md-12">
-													        <div class="form-group label-floating">
-	                                                            <label class="control-label">Title</label>
-	                                                            ${book.title}
-													        </div>
-	                                                   	</div>
-	                                                </div>
-	                                                
-	                                               
-
-	                                                <div class="row">
-                                                        <div class="col-md-12">
-													        <div class="form-group label-floating">
-	                                                            <label class="control-label">Author</label>
-	                                                            ${book.author}
-													        </div>
-	                                                   </div>
-                                                    </div>
-
-
+                                                <form action="UnlockAccountServlet" method="post"> 
                                                     <div class="row">
-                                                        <div class="col-md-12">
-													        <div class="form-group label-floating">
-	                                                            <label class="control-label">Publisher</label>
-	                                                            ${book.publisher}
-													        </div>
-	                                                   	</div>
-	                                                </div>
-
-                                                	<div class="row">
-                                                        <div class="col-md-12">
-													        <div class="form-group label-floating">
-	                                                            <label class="control-label">Year</label>
-	                                                            ${book.year}
-													        </div>
-	                                                   </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12"><label class="control-label">Reservation Date</label>
-                                                            <div class="form-group label-floating">
-												                
-                                                                <input type="date" id="dateFrom" name="dateFrom" class="form-control" >
-	                                                       </div>
-                                                        </div>
                                                         
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-12"><label class="control-label">Anticipated Date</label>
-                                                            <div class="form-group label-floating">
-												                
-                                                                <input type="date" id="dateTo" name="dateTo" class="form-control" >
-	                                                       </div>
-                                                        </div>
-                                                        
-                                                    </div>                                 
+                                                        <div class="col-md-12">
+												        <div class="form-group label-floating">
+                                                            <label class="control-label">ID Number</label>
+                                                            <input type="number" class="form-control" id="idnumber" name="idnumber">
+												        </div>
+	                                                   </div>
                                                     
-                                                 <button type="submit" name="reserve" value="${book.idBook}" onClick="return empty()" class="btn btn-block btn-success">Reserve Book</button>
+                                                    </div>
+                                                  
+                                                 <button type="submit" name="save" class="btn btn-block btn-success">Unlock</button>
+                                                 
 	                                             <div class="clearfix"></div>
                                                 
                                                 </form>
@@ -226,6 +184,7 @@
     </div>
 
 </body>
+
 	<!--   Core JS Files   -->
 	<script src="bootstrap/js/jquery-3.2.1.min.js" type="text/javascript"></script>
 	<script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -236,19 +195,8 @@
 	<script src="bootstrap/js/bootstrap-notify.js"></script>
 
 	<!-- Material Dashboard javascript methods -->
-	<script src="bootstrap/js/material-dashboard.js"></script>	
-	
-	<script>
-		function empty() {
-		    var df, dt;
-		    
-		    df = document.getElementById("dateFrom").value;
-		    dt = document.getElementById("dateTo").value;
-		    
-		    if (df == "" || dt == "") {
-		        alert("Fields cannot be empty");
-		        return false;
-		    };
-		}
-	</script>	
+	<script src="bootstrap/js/material-dashboard.js"></script>
+
 </html>
+
+

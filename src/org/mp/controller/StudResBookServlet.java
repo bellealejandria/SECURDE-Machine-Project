@@ -46,11 +46,6 @@ public class StudResBookServlet extends HttpServlet {
 		ArrayList <Book> books = (ArrayList<Book>) bookdao.getAllBooks();
 		request.setAttribute("listOfBooks", books);
 		
-		/*LocalDate today = LocalDate.now();
-		LocalDate nextWeek = today.plus(1, ChronoUnit.WEEKS);
-		request.setAttribute("today", today);
-		request.setAttribute("nextwk", nextWeek);*/
-		
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/reserveBook.jsp");
 	    view.forward(request, response);
         // TODO Auto-generated constructor stub

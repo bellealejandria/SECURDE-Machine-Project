@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<% if(session.getAttribute("idNumber") == null) response.sendRedirect("login.jsp");	
-int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = login.jsp"); %>
+<% int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = expiredpage.html"); %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -23,6 +22,8 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
     
 </head>
 <body>
+<c:if test="${sessionScope.idNumber ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+<c:if test="${sessionScope.role ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'mngr'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'staff'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'stud'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
@@ -52,28 +53,34 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 							<c:choose> 
 								<c:when test="${sessionScope.role == 'admin'}">
 									<li onclick="location.href='AdminCreateStaffServlet';"><a>Create Staff</a></li>
-									<li><a href="#">Export</a></li>
+									<li onclick="location.href='AdminExportServlet';"><a>Export</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
+									<li onclick="location.href='GoToUnlockServlet';"><a>Unlock account</a></li>
 								</c:when>
 
 								<c:when test="${sessionScope.role == 'mngr'}">
-									<li onclick="location.href='MngrAddBookServlet';"><a>Add Book</a></li>
+									<li onclick="location.href='MngrGoToAddBookServlet';"><a>Add Book</a></li>
 									<li onclick="location.href='MngrEditBookServlet';"><a>Edit Book</a></li>
 									<li onclick="location.href='MngrOverBookServlet';"><a>Override Book Reservations</a></li>
 									<li onclick="location.href='MngrOverRoomServlet';"><a>Override Room Reservations</a></li>
-									<li><a href="#">Export</a></li>
+									<li onclick="location.href='AdminExportServlet';"><a>Export</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'staff'}">
 									<li onclick="location.href='StaffAddBookServlet';"><a>Add Book</a></li>
 									<li onclick="location.href='StaffEditBookServlet';"><a>Edit Book</a></li>
 									<li onclick="location.href='StaffViewRoomServlet';"><a>View Rooms</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'stud'}">
 									<li onclick="location.href='StudResBookServlet';"><a>Reserve Book</a></li>
 									<li onclick="location.href='StudResRoomServlet';"><a>Reserve Room</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'fac'}">
 									<li onclick="location.href='FacResBookServlet';"><a>Reserve Book</a></li>
 									<li onclick="location.href='FacResRoomServlet';"><a>Reserve Room</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 							</c:choose>
 						</ul>
@@ -89,9 +96,21 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 			</div>
 		</div>
 	</nav>
+
 	
 	<div class="main-panel">
 		<div class="content">	
+			<c:if test="${trigger ==  1}">
+			    <div class="alert alert-success">
+			    	<strong>Success! </strong>Registered new staff!
+				</div>
+			</c:if>
+			<c:if test="${trigger ==  2}">
+			    <div class="alert alert-warning">
+			    	<strong>Warning! </strong>Account already exists!
+				</div>
+			</c:if>
+			
 			<div class="row">
 				<div class="col-md-4"></div>
 
@@ -206,11 +225,10 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 												<div class="col-md-6">
 													<label class="control-label">Secret Answer</label>
 													<div class="form-group label-floating">
-														<input type="password" id="secretAns" name="secretAns" class="form-control" >
+														<input type="text" id="secretAns" name="secretAns" class="form-control" >
 													</div>
 												</div>
 											</div>
-
 
 											<button type="submit" name="createAcct"  onClick="return empty()" class="btn btn-block btn-success">Create Account</button>
 											<div class="clearfix"></div>

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mp.dao.LoginDAO;
+import org.mp.dao.LoginDAOImplementation;
 import org.mp.dao.MemberDAO;
 import org.mp.dao.MemberDAOImplementation;
 import org.mp.model.Member;
@@ -19,9 +21,11 @@ import org.mp.model.Member;
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
 	private MemberDAO memberdao;
+	private LoginDAO logindao;
 	private static final long serialVersionUID = 1L;
 	public RegisterServlet() {
         memberdao = new MemberDAOImplementation();
+        logindao = new LoginDAOImplementation();
     }
 
 	/**
@@ -54,10 +58,9 @@ public class RegisterServlet extends HttpServlet {
 	    String secretAns = request.getParameter( "secretAns" );
 	    
 	    password = new Encrypt().encrypt(password);
+	    boolean checkID = logindao.checkID(idNum);
 	    
-	    if(stringIdNum != null && firstName != null && midInitial != null && 
-	    		lastName != null && birthday != null && email != null &&
-	    		password != null && secretQuestion != null && secretAns != null) {
+	    if(!checkID) {
 	    	
 	    	if(((int) Math.floor(idNum / Math.pow(10, Math.floor(Math.log10(idNum))))) == 1)
 				member.setRole( "stud" );
@@ -75,10 +78,15 @@ public class RegisterServlet extends HttpServlet {
 	        member.setSecretAns( secretAns );
 
 	        memberdao.addMember(member);
-	        RequestDispatcher view = request.getRequestDispatcher("login.jsp");
+	        
+	        request.setAttribute("trigger", 1);
+	        RequestDispatcher view = request.getRequestDispatcher("reg.jsp");
 		    view.forward(request, response);
 	    }
 	    else {
+	    	if(checkID)
+	    		request.setAttribute("trigger", 2);
+	    	
 	    	RequestDispatcher view = request.getRequestDispatcher("reg.jsp");
 		    view.forward(request, response);
 	    }

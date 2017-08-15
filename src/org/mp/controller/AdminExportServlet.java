@@ -5,23 +5,22 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class LogOutServlet
+ * Servlet implementation class AdminExportServlet
  */
-@WebServlet("/LogOutServlet")
-public class LogOutServlet extends HttpServlet {
+@WebServlet("/AdminExportServlet")
+public class AdminExportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogOutServlet() {
+    public AdminExportServlet() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -31,7 +30,7 @@ public class LogOutServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		doPost(request,response);
+		doPost(request, response);
 	}
 
 	/**
@@ -39,13 +38,22 @@ public class LogOutServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession newsession = request.getSession(false);
-	    if (newsession != null) {
-	         newsession.invalidate();
-	    }
-	    
-	    RequestDispatcher view = request.getRequestDispatcher("/login.jsp");
-	    view.forward(request, response);
+		String session = request.getSession(false).getAttribute("role").toString();
+		
+		if(session.equals("admin") || session.equals("mngr")) {
+			AdminExportData exp = new AdminExportData();
+			exp.exportBook(System.getProperty("user.home") + System.getProperty("file.separator") + "book.csv");
+			exp.exportRoom(System.getProperty("user.home") + System.getProperty("file.separator") + "room.csv");
+			
+			request.setAttribute("trigger", 1);
+			RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");
+		    view.forward(request, response);
+		}
+		else {
+			RequestDispatcher view = request.getRequestDispatcher("erroracct.html");
+		    view.forward(request, response);
+		}
+		
 	}
 
 }

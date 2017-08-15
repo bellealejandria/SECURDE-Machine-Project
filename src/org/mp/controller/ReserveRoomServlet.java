@@ -57,6 +57,7 @@ public class ReserveRoomServlet extends HttpServlet {
 		resroom.setStatus(1);
 		
 		resroomdao.addReserveRoom(resroom);
+		request.setAttribute("trigger", 1);
 		
 		ArrayList <ReserveRoom> resRoom1 = (ArrayList<ReserveRoom>) resroomdao.getAllRoom1();
 		request.setAttribute("ListRoom1", resRoom1);

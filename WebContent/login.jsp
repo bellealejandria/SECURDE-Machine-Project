@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
@@ -19,16 +20,36 @@
 </head>
 
 <body>
-
+	
+	
+	
 	<div class="wrapper">
-        <!--<nav class="navbar navbar-default navbar-absolute">
-            
-                <div class="container-fluid">
-				    <img class="logo" width="50px" src="assets/img/logo.png"> Library
-                </div>
-            </nav>-->
-
 	    <div class="main-panel">
+		    <c:if test="${trigger ==  1}">
+			    <c:choose>
+					<c:when test="${numTry > 1}">
+				        <div class="alert alert-warning">
+					    	<strong>Warning! </strong><c:out value="${numTry}"></c:out> attempts left!
+						</div>
+					</c:when>
+					<c:when test="${numTry == 1}">
+				        <div class="alert alert-warning">
+					    	<strong>Warning! </strong>Last attempt left!
+						</div>
+					</c:when>
+					<c:when test="${numTry == 0}">
+						<div class="alert alert-danger">
+					    	<strong>Warning! </strong>Account locked! Please contact the administrator.
+						</div>
+					</c:when>
+					<c:when test="${numTry < 0}">
+						<div class="alert alert-danger">
+					    	<strong>Warning! </strong>Incorrect username/password!
+						</div>
+					</c:when>
+				</c:choose>
+			</c:if>
+			
 			<div class="content">
 					<div class="row">
                         <div class="col-md-4">
@@ -68,7 +89,7 @@
                                                         <div class="col-md-12">
 												        <div class="form-group label-floating">
                                                             <label class="control-label">Username</label>
-                                                            <input type="text" id="idnumber" class="form-control" name="idnumber">
+                                                            <input type="number" id="idnumber" class="form-control" name="idnumber">
 												        </div>
 	                                                   </div>
                                                     

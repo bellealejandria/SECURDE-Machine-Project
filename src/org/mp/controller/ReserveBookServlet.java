@@ -56,14 +56,22 @@ public class ReserveBookServlet extends HttpServlet {
 		int id = Integer.parseInt(request.getParameter("reserve"));
 		HttpSession session = request.getSession();
 		String sessionID = session.getAttribute("idNumber").toString();
+		String dateFrom = request.getParameter("dateFrom");
+		String dateTo = request.getParameter("dateTo");
 		
-		ReserveBook resbook = new ReserveBook();
-		resbook.setIdnumber(Integer.parseInt(sessionID));
-		resbook.setIdbook(id);
-		resbook.setDateFrom(request.getParameter("dateFrom"));
-		resbook.setDateTo(request.getParameter("dateTo"));
+		if(dateFrom.compareTo(dateTo)<0) {
+			ReserveBook resbook = new ReserveBook();
+			resbook.setIdnumber(Integer.parseInt(sessionID));
+			resbook.setIdbook(id);
+			resbook.setDateFrom(dateFrom);
+			resbook.setDateTo(dateTo);
+			
+			resbookdao.addReserveBook(resbook);
+			request.setAttribute("trigger", 1);
+		}
+		else
+			request.setAttribute("trigger", 2);
 		
-		resbookdao.addReserveBook(resbook);
 		
 		ArrayList <Book> books = (ArrayList<Book>) bookdao.getAllBooks();
 		request.setAttribute("listOfBooks", books);

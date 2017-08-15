@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<% if(session.getAttribute("idNumber") == null) response.sendRedirect("login.jsp");	
-int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = login.jsp"); %>
-
+<% int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = expiredpage.html"); %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -23,6 +21,8 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
 </head>
 <body>
+<c:if test="${sessionScope.idNumber ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+<c:if test="${sessionScope.role ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'admin'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'staff'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 <c:if test="${sessionScope.role ==  'stud'}"><c:redirect url="erroracct.html"></c:redirect></c:if>
@@ -52,28 +52,33 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 							<c:choose> 
 								<c:when test="${sessionScope.role == 'admin'}">
 									<li onclick="location.href='AdminCreateStaffServlet';"><a>Create Staff</a></li>
-									<li><a href="#">Export</a></li>
+									<li onclick="location.href='AdminExportServlet';"><a>Export</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 
 								<c:when test="${sessionScope.role == 'mngr'}">
-									<li onclick="location.href='MngrAddBookServlet';"><a>Add Book</a></li>
+									<li onclick="location.href='MngrGoToAddBookServlet';"><a>Add Book</a></li>
 									<li onclick="location.href='MngrEditBookServlet';"><a>Edit Book</a></li>
 									<li onclick="location.href='MngrOverBookServlet';"><a>Override Book Reservations</a></li>
 									<li onclick="location.href='MngrOverRoomServlet';"><a>Override Room Reservations</a></li>
-									<li><a href="#">Export</a></li>
+									<li onclick="location.href='AdminExportServlet';"><a>Export</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'staff'}">
 									<li onclick="location.href='StaffAddBookServlet';"><a>Add Book</a></li>
 									<li onclick="location.href='StaffEditBookServlet';"><a>Edit Book</a></li>
 									<li onclick="location.href='StaffViewRoomServlet';"><a>View Rooms</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'stud'}">
 									<li onclick="location.href='StudResBookServlet';"><a>Reserve Book</a></li>
 									<li onclick="location.href='StudResRoomServlet';"><a>Reserve Room</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'fac'}">
 									<li onclick="location.href='FacResBookServlet';"><a>Reserve Book</a></li>
 									<li onclick="location.href='FacResRoomServlet';"><a>Reserve Room</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 							</c:choose>
 						</ul>
@@ -90,54 +95,25 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 		</div>
 	</nav>
 
+
     <div class="main-panel">
         <div class="content">
+        	<c:if test="${trigger ==  1}">
+			    <div class="alert alert-warning">
+			    	<strong>Warning! </strong>Invalid ID Number!
+				</div>
+			</c:if>
             <div class="row">
                 <div class="col-lg-12 col-md-12">
-                    <div class="card card-nav-tabs">
-                    <form action="SortReserveBookServlet" method="post">
-                        <div class="card-header" data-background-color="purple">
-                            <div class="nav-tabs-navigation">
-                                <div class="nav-tabs-wrapper">
-                                
-                                    <ul class="nav nav-tabs" data-tabs="tabs">
-                                        <div class="col-md-6">
-                                            <li class="">
-                                                <div class="form-group label-floating">
-                                                    <select name="sortby" type="text" class="form-control text-white">
-                                                        <option class="text-black" value="S1">View All</option>
-                                                        <option class="text-black" value="S2">ID Number</option>
-                                                        <option class="text-black" value="S3">Title</option>
-                                                        <option class="text-black" value="S4">Status</option>
-                                                        <option class="text-black" value="S5">Date Borrowed</option>
-                                                        <option class="text-black" value="S6">Date Returned</option>
-                                                    </select>
-                                                </div>
-                                            </li>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <li class="">
-                                                <div class="form-group label-floating">
-                                                    <button name="sortByBtn" type="submit" class="btn btn-success pull-right btn-round" style="margin-top: -0.5em; margin-right: 2em;">Sort</button>
-                                                </div>
-                                            </li>
-                                        </div>
-                                    </ul>
-                                
-                                </div>
-                            </div>
-                        </div>
-                        
-                        </form>
-</div>
+                    
                         <div class="card-content">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="">
                                     <div class="card-content table-responsive">
                                         <table class="table table-hover">
                                             <thead class="text-warning">
-                                                <th>Room Code</th>
                                                 <th>ID Number</th>
+                                                <th>Room Code</th>
                                                 <th>Start</th>
                                                 <th>End</th>
                                                 <th>Action</th>

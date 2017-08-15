@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<% if(session.getAttribute("idNumber") == null) response.sendRedirect("login.jsp");	
-int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = login.jsp"); %>
-
+<% int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", timeout + "; URL = expiredpage.html"); %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -24,6 +22,8 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 </head>
 
 <body>
+<c:if test="${sessionScope.idNumber ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
+<c:if test="${sessionScope.role ==  null}"><c:redirect url="erroracct.html"></c:redirect></c:if>
 
 <div class="wrapper">
 	<nav class="navbar navbar-transparent navbar-absolute">
@@ -49,28 +49,34 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 							<c:choose> 
 								<c:when test="${sessionScope.role == 'admin'}">
 									<li onclick="location.href='AdminCreateStaffServlet';"><a>Create Staff</a></li>
-									<li><a href="#">Export</a></li>
+									<li onclick="location.href='AdminExportServlet';"><a>Export</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
+									<li onclick="location.href='GoToUnlockServlet';"><a>Unlock account</a></li>
 								</c:when>
 
 								<c:when test="${sessionScope.role == 'mngr'}">
-									<li onclick="location.href='MngrAddBookServlet';"><a>Add Book</a></li>
+									<li onclick="location.href='MngrGoToAddBookServlet';"><a>Add Book</a></li>
 									<li onclick="location.href='MngrEditBookServlet';"><a>Edit Book</a></li>
 									<li onclick="location.href='MngrOverBookServlet';"><a>Override Book Reservations</a></li>
 									<li onclick="location.href='MngrOverRoomServlet';"><a>Override Room Reservations</a></li>
-									<li><a href="#">Export</a></li>
+									<li onclick="location.href='AdminExportServlet';"><a>Export</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'staff'}">
 									<li onclick="location.href='StaffAddBookServlet';"><a>Add Book</a></li>
 									<li onclick="location.href='StaffEditBookServlet';"><a>Edit Book</a></li>
 									<li onclick="location.href='StaffViewRoomServlet';"><a>View Rooms</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'stud'}">
 									<li onclick="location.href='StudResBookServlet';"><a>Reserve Book</a></li>
 									<li onclick="location.href='StudResRoomServlet';"><a>Reserve Room</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 								<c:when test="${sessionScope.role == 'fac'}">
 									<li onclick="location.href='FacResBookServlet';"><a>Reserve Book</a></li>
 									<li onclick="location.href='FacResRoomServlet';"><a>Reserve Room</a></li>
+									<li onclick="location.href='ChangePassServlet';"><a>Change Password</a></li>
 								</c:when>
 							</c:choose>
 						</ul>
@@ -89,6 +95,11 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 
 	<div class="main-panel">
 		<div class="content">
+			<c:if test="${trigger ==  1}">
+			    <div class="alert alert-success">
+			    	<strong>Success! </strong>CSV files are created successfully!
+				</div>
+			</c:if>
 			<c:choose> 
 				
 				<c:when test="${sessionScope.role == 'admin'}">	   
@@ -104,11 +115,31 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 							</div>
 							</a>
 						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<a href="#">
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='AdminExportServlet';">
+							<a>
 								<div class="card card-stats">
 									<div class="card-content"  data-background-color="orange">
 										<center><h3 class="title">Export</h3></center>
+									</div>
+								</div>
+							</a>
+						</div>
+						</div>
+					<div class="row">
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='ChangePassServlet';">
+							<a>
+								<div class="card card-stats">
+									<div class="card-content"  data-background-color="blue">
+										<center><h3 class="title">Change Password</h3></center>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='GoToUnlockServlet';">
+							<a>
+								<div class="card card-stats">
+									<div class="card-content"  data-background-color="red">
+										<center><h3 class="title">Unlock Account</h3></center>
 									</div>
 								</div>
 							</a>
@@ -118,7 +149,7 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 
 				<c:when test="${sessionScope.role == 'mngr'}">	   
 					<div class="row">
-						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='MngrAddBookServlet';">
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='MngrGoToAddBookServlet';">
 							<a>
 								<div class="card card-stats">
 									<div class="card-content"  data-background-color="green">
@@ -157,11 +188,20 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 								</div>
 							</a>
 						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<a href="#">
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='AdminExportServlet';">
+							<a>
 								<div class="card card-stats">
 									<div class="card-content"  data-background-color="purple">
 										<center><h3 class="title">Export</h3></center>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='ChangePassServlet';">
+							<a>
+								<div class="card card-stats">
+									<div class="card-content"  data-background-color="orange">
+										<center><h3 class="title">Change Password</h3></center>
 									</div>
 								</div>
 							</a>
@@ -183,17 +223,28 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='StaffEditBookServlet';">	
 							<a>
 								<div class="card card-stats">
-									<div class="card-content"  data-background-color="orange">
+									<div class="card-content"  data-background-color="red">
 										<center><h3 class="title">Edit Book</h3></center>
 									</div>
 								</div>
 							</a>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='StaffViewRoomServlet';">	
 							<a>
 								<div class="card card-stats">
 									<div class="card-content"  data-background-color="blue">
 										<center><h3 class="title">View Meeting Rooms</h3></center>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='ChangePassServlet';">
+							<a>
+								<div class="card card-stats">
+									<div class="card-content"  data-background-color="purple">
+										<center><h3 class="title">Change Password</h3></center>
 									</div>
 								</div>
 							</a>
@@ -224,6 +275,15 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 								</div>
 							</a>
 						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='ChangePassServlet';">
+							<a>
+								<div class="card card-stats">
+									<div class="card-content"  data-background-color="purple">
+										<center><h3 class="title">Change Password</h3></center>
+									</div>
+								</div>
+							</a>
+						</div>
 					</div>
 				</c:when>
 
@@ -247,6 +307,16 @@ int timeout = session.getMaxInactiveInterval(); response.setHeader("Refresh", ti
 									<center><h3 class="title">Reserve Meeting Room</h3></center>
 								</div>
 							</div>
+							</a>
+						</div>
+						
+						<div class="col-lg-3 col-md-6 col-sm-6" onclick="location.href='ChangePassServlet';">
+							<a>
+								<div class="card card-stats">
+									<div class="card-content"  data-background-color="purple">
+										<center><h3 class="title">Change Password</h3></center>
+									</div>
+								</div>
 							</a>
 						</div>
 					</div>

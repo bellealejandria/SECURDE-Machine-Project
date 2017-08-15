@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mp.dao.LoginDAO;
+import org.mp.dao.LoginDAOImplementation;
 import org.mp.dao.MemberDAO;
 import org.mp.dao.MemberDAOImplementation;
 import org.mp.model.Member;
@@ -20,11 +22,13 @@ import org.mp.model.Member;
 public class NewAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private MemberDAO memberdao;
+    private LoginDAO logindao;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public NewAccountServlet() {
         memberdao = new MemberDAOImplementation();
+        logindao = new LoginDAOImplementation();
         // TODO Auto-generated constructor stub
     }
 
@@ -34,8 +38,6 @@ public class NewAccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		RequestDispatcher view = request.getRequestDispatcher("erroracct.html");
-	    view.forward(request, response);
 	}
 
 	/**
@@ -57,9 +59,11 @@ public class NewAccountServlet extends HttpServlet {
 	    String secretQuestion = request.getParameter( "secretQuestion" );
 	    String secretAns = request.getParameter( "secretAns" );
 	    
-	    if(stringIdNum != null && firstName != null && midInitial != null && 
-	    		lastName != null && birthday != null && email != null &&
-	    		password != null && secretQuestion != null && secretAns != null) {
+	    password = new Encrypt().encrypt(password);
+	    boolean checkID = logindao.checkID(idNum);
+	    int startNum = (int) Math.floor(idNum / Math.pow(10, Math.floor(Math.log10(idNum))));
+	    
+	    if(!checkID) {
 	    	
 	    	if(role.equals("1"))
 	    		member.setRole("mngr");
@@ -77,13 +81,19 @@ public class NewAccountServlet extends HttpServlet {
 	        member.setSecretAns( secretAns );
 
 	        memberdao.addMember(member);
-	        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");
+	        
+	        request.setAttribute("trigger", 1);
+	        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/newAccount.jsp");
 		    view.forward(request, response);
 	    }
 	    else {
-	    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/newAcct.jsp");
+	    	if(checkID) 
+	    		request.setAttribute("trigger", 2);
+	    	
+	    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/newAccount.jsp");
 		    view.forward(request, response);
 	    }
+	   
 	}
 
 }

@@ -18,7 +18,6 @@ public class LoginDAOImplementation implements LoginDAO {
     @Override
     public boolean validate( int idnumber, String password ) {
     	boolean status = false;
-    	
  	
         try {
             String query = "select * from member where idnumber=? and password=?";
@@ -33,6 +32,8 @@ public class LoginDAOImplementation implements LoginDAO {
         }
         return status;
     }
+    
+    
 
 
 	@Override

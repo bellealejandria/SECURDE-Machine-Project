@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mp.dao.LoginDAO;
+import org.mp.dao.LoginDAOImplementation;
 import org.mp.dao.ReserveBookDAO;
 import org.mp.dao.ReserveBookDAOImplementation;
 import org.mp.model.ReserveBook;
@@ -21,12 +23,14 @@ import org.mp.model.ReserveBook;
 public class OverrideBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ReserveBookDAO resbookdao;
+	private LoginDAO logindao;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public OverrideBookServlet() {
         resbookdao = new ReserveBookDAOImplementation();
+        logindao = new LoginDAOImplementation();
         // TODO Auto-generated constructor stub
     }
 
@@ -55,20 +59,33 @@ public class OverrideBookServlet extends HttpServlet {
 			String dateFrom = request.getParameter("dateFrom");
 			String dateTo = request.getParameter("dateTo");			
 
-			resbook.setIdbook_reservation(id);
-			resbook.setIdbook(idbook);
-			resbook.setIdnumber(idnumber);
-			resbook.setStatus(status);
-			resbook.setDateFrom(dateFrom);
-			resbook.setDateTo(dateTo);
+			boolean checkID = logindao.checkID(idnumber);
+		    
+		    if(checkID) {
+		    	resbook.setIdbook_reservation(id);
+				resbook.setIdbook(idbook);
+				resbook.setIdnumber(idnumber);
+				resbook.setStatus(status);
+				resbook.setDateFrom(dateFrom);
+				resbook.setDateTo(dateTo);
+				
+				resbookdao.updateReserveBook(resbook);
+
+				ArrayList <ReserveBook> books = (ArrayList<ReserveBook>) resbookdao.viewAllReserveBooks();
+				request.setAttribute("listOfReserveBooks", books);
+				
+		    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/overrideBook.jsp");
+			    view.forward(request, response);
+		    }
+		    else {
+		    	ArrayList <ReserveBook> books = (ArrayList<ReserveBook>) resbookdao.viewAllReserveBooks();
+				request.setAttribute("listOfReserveBooks", books);
+				
+				request.setAttribute("trigger", 1);
+		    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/overrideBook.jsp");
+			    view.forward(request, response);
+		    }
 			
-			resbookdao.updateReserveBook(resbook);
-			
-			ArrayList <ReserveBook> books = (ArrayList<ReserveBook>) resbookdao.viewAllReserveBooks();
-			request.setAttribute("listOfReserveBooks", books);
-			
-	    	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/overrideBook.jsp");
-		    view.forward(request, response);
 		}
 		else if(request.getParameter("delete") != null ){
 			int id = Integer.parseInt(request.getParameter("delete"));
